@@ -7,23 +7,30 @@ const { v4: uuidV4 } = require("uuid");
 const app = express();
 const server = http.createServer(app);
 
+// ✅ Correct CORS Setup
 app.use(cors({
-    origin: ["http://localhost:5173", "https://chat-frontend-alpha-three.vercel.app/"], // Replace with your actual Vercel URL
+    origin: ["http://localhost:5173", "https://chat-frontend-alpha-three.vercel.app"], // Removed trailing slash
     methods: ["GET", "POST"]
 }));
 
-
-app.use(cors());
+// ✅ Initialize Socket.io
+const io = new Server(server, {
+    cors: {
+        origin: ["http://localhost:5173", "https://chat-frontend-alpha-three.vercel.app"], 
+        methods: ["GET", "POST"]
+    }
+});
 
 const rooms = {}; // Store active rooms
 
-// API to create a room
+// ✅ API to create a room
 app.get("/create-room", (req, res) => {
     const roomId = uuidV4();
     rooms[roomId] = [];
     res.json({ roomId });
 });
 
+// ✅ Socket.io Event Handlers
 io.on("connection", (socket) => {
     console.log("A user connected");
 
@@ -55,4 +62,5 @@ io.on("connection", (socket) => {
     });
 });
 
+// ✅ Start the Server
 server.listen(3000, () => console.log("Server running on http://localhost:3000"));
