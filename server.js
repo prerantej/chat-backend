@@ -6,7 +6,6 @@ const { v4: uuidV4 } = require("uuid");
 
 const app = express();
 const server = http.createServer(app);
-const cors = require("cors");
 
 app.use(cors({
     origin: ["http://localhost:5173", "https://chat-frontend-alpha-three.vercel.app/"], // Replace with your actual Vercel URL
